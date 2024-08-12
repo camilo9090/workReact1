@@ -1,4 +1,4 @@
-export default function Guitar({ guitar, setCart }) {
+export default function Guitar({ guitar,addToCart }) {
   const { id, name, image, description, price } = guitar;
 
 
@@ -21,7 +21,7 @@ export default function Guitar({ guitar, setCart }) {
           className="btn btn-dark w-100"
           //()=> evita que todo el codigo se mande
           //lo envia solo al dar click
-          onClick={() =>  setCart(prevCart=>[...prevCart,guitar])}
+          onClick={() =>  addToCart(guitar)}
         >
           Agregar al Carrito
         </button>
