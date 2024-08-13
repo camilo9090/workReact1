@@ -6,7 +6,8 @@ import { db } from "./data/db";
 function App() {
   const [data, setdata] = useState(db);
   const [cart, setCart] = useState([]);
-  
+  const MAX_VALUE = 5;
+  const MIN_VALUE = 0;
 
   function addToCart(item) {
     const itemExist = cart.findIndex((guitar) => guitar.id === item.id);
@@ -26,17 +27,41 @@ function App() {
   }
 
   function removeFrontCart(id) {
-    
-    setCart(prevCart=>prevCart.filter(guitar=>guitar.id !==id))
+    setCart((prevCart) => prevCart.filter((guitar) => guitar.id !== id));
+  }
 
-    
+  function increaseQuantity(id) {
+    const updateCart = cart.map((item) => {
+      if (id === item.id && item.quantity < MAX_VALUE) {
+        return {
+          ...item,
+          quantity: item.quantity + 1,
+        };
+      }
+      return item;
+    });
+    setCart(updateCart);
+  }
+  function decreasedQuantity(id) {
+    const updateCart = cart.map((item) => {
+      if (item.id === id && item.quantity > MIN_VALUE) {
+        return {
+          ...item,
+          quantity: item.quantity - 1,
+        };
+      }
+      return item;
+    });
+    setCart(updateCart);
   }
 
   return (
     <>
-      <Header 
-      cart={cart}
-      removeFrontCart={removeFrontCart}
+      <Header
+        cart={cart}
+        removeFrontCart={removeFrontCart}
+        increaseQuantity={increaseQuantity}
+        decreasedQuantity={decreasedQuantity}
       />
 
       <main className="container-xl mt-5">
@@ -44,10 +69,7 @@ function App() {
 
         <div className="row mt-5">
           {data.map((guitar) => (
-            <Guitar key={guitar.id}
-             guitar={guitar} 
-             addToCart={addToCart} 
-             />
+            <Guitar key={guitar.id} guitar={guitar} addToCart={addToCart} />
           ))}
         </div>
       </main>
