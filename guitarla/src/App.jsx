@@ -6,6 +6,7 @@ import { db } from "./data/db";
 function App() {
   const [data, setdata] = useState(db);
   const [cart, setCart] = useState([]);
+  
 
   function addToCart(item) {
     const itemExist = cart.findIndex((guitar) => guitar.id === item.id);
@@ -24,10 +25,18 @@ function App() {
     }
   }
 
+  function removeFrontCart(id) {
+    
+    setCart(prevCart=>prevCart.filter(guitar=>guitar.id !==id))
+
+    
+  }
+
   return (
     <>
       <Header 
       cart={cart}
+      removeFrontCart={removeFrontCart}
       />
 
       <main className="container-xl mt-5">
@@ -35,7 +44,10 @@ function App() {
 
         <div className="row mt-5">
           {data.map((guitar) => (
-            <Guitar key={guitar.id} guitar={guitar} addToCart={addToCart} />
+            <Guitar key={guitar.id}
+             guitar={guitar} 
+             addToCart={addToCart} 
+             />
           ))}
         </div>
       </main>

@@ -1,7 +1,10 @@
-export default function Header({ cart }) {
+
+import {useMemo}from 'react'
+export default function Header({ cart,removeFrontCart }) {
   //State Derivado
-  const isEmpty = () => cart.length === 0;
-  const suma = ()=>cart.reduce((total,item)=>total+(item.quantity * item.price),0);
+  //
+  const isEmpty = useMemo(() => cart.length === 0,[cart])
+  const suma = useMemo(()=>cart.reduce((total,item)=>total+(item.quantity * item.price),0),[cart])
   return (
     <>
       <header className="py-5 header">
@@ -25,7 +28,7 @@ export default function Header({ cart }) {
                 />
 
                 <div id="carrito" className="bg-white p-3">
-                  {isEmpty() ? (
+                  {isEmpty ? (
                     <p className="text-center">El carrito esta vacio</p>
                   ) : (
                     <>
@@ -61,7 +64,13 @@ export default function Header({ cart }) {
                               </button>
                             </td>
                             <td>
-                              <button className="btn btn-danger" type="button">
+                              <button 
+                              className="btn btn-danger" 
+                              type="button"
+                              onClick={()=>removeFrontCart(guitar.id)}
+                              
+                              >
+                              
                                 X
                               </button>
                             </td>
@@ -71,7 +80,7 @@ export default function Header({ cart }) {
                     </table>
                 
                   <p className="text-end">
-                    Total pagar: <span className="fw-bold">${suma()}</span>
+                    Total pagar: <span className="fw-bold">${suma}</span>
                   </p>
                   </>
                     )}
