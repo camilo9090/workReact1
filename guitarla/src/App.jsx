@@ -1,13 +1,27 @@
 import Header from "./components/Header";
 import Guitar from "./components/Guitar";
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import { db } from "./data/db";
 
 function App() {
-  const [data, setdata] = useState(db);
-  const [cart, setCart] = useState([]);
+
+  const initialCart=()=>{
+    //localStore verifica si hay algo en el archivo y lo retorna
+    //en caso de que no haya nada retorna un Null
+    const localStorageCart=localStorage.getItem('cart')
+    //aca se crea un ternario, en caso de que haya algo retorne lo que haya
+    //en el archivo en caso de que no haya retorna un arreglo vacio
+    return localStorageCart ? JSON.parse(localStorageCart):[]
+  }
+  const [data] = useState(db);
+  //aca seteamos el cart con lo que de la variable initialCart
+  const [cart, setCart] = useState(initialCart);
   const MAX_VALUE = 5;
   const MIN_VALUE = 1;
+
+  useEffect(()=>{
+    localStorage.setItem("cart", JSON.stringify(cart))
+  },[cart])
 
   function addToCart(item) {
     const itemExist = cart.findIndex((guitar) => guitar.id === item.id);
@@ -22,6 +36,7 @@ function App() {
       item.quantity = 1;
       setCart([...cart, item]);
     }
+   
   }
 
   function removeFrontCart(id) {
@@ -51,12 +66,12 @@ function App() {
       return item;
     });
     setCart(updateCart);
-  }function clearCart() {
-    setCart([])
-    
-    
+  }
+  function clearCart() {
+    setCart([]);
   }
 
+ 
   return (
     <>
       <Header
